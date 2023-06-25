@@ -236,17 +236,29 @@ def welcome():
     #databases
     database_list  = show_databases(username, password, account)
 
-    selected_database = st.selectbox("Select a database", database_list)
+    if database_list==None:
+        st.write("No database selected !")
+    else:
+        selected_database = st.selectbox("Select a database", database_list)
 
     #schemas
     schemas_list = show_schemas(username, password, account)
 
-    selected_schemas = st.selectbox("Select a Schema", schemas_list)
+    if schemas_list==None:
+        st.write("No database selected !")
+    else:
+        selected_schemas = st.selectbox("Select a Schema", schemas_list)
+
 
     #tables
     table_list = show_tables(username, password, account, database, schema)
 
-    selected_table = st.selectbox("Select a Table", table_list)
+
+    if table_list==None:
+        st.write("No database selected !")
+    else:
+        selected_table = st.selectbox("Select a Table", table_list)
+
 
 
 
@@ -268,26 +280,30 @@ def welcome():
         
     
 
-    st.write("Click the button to call the stored procedure")
-    if st.button("Call Procedure"):
+    st.write("Click the button to display the table")
+    if st.button("Show Table"):
         call_stored_procedure(username, password, account, database, table)
 
 
     with st.container():
 
         variables = table_schema(username, password, account, database, schema, table)
-        values=[]
 
-        for variable in variables:
-            value = st.text_input(variable)
-            values.append(value)
-        
+        if variables==None:
+            st.write('Improper selection')
+        else:
+            values=[]
 
-        if st.button("Insert Data"):
-            call_data_procedure(variables, values, username, password, account, database, table)
+            for variable in variables:
+                value = st.text_input(variable)
+                values.append(value)
+            
 
-        if st.button("Function Call"):
-            hello()
+            if st.button("Insert Data"):
+                call_data_procedure(variables, values, username, password, account, database, table)
+
+            if st.button("Function Call"):
+                hello()
 
 
 
